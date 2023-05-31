@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Appointments</h1>
+
+  {% for appointment in appointments %}
+    <div class="appointment">
+      <p><strong>Name:</strong> {{ appointment.name }}</p>
+      <p><strong>Email:</strong> {{ appointment.email }}</p>
+      <p><strong>Date:</strong> {{ appointment.date }}</p>
+      <p><strong>Time:</strong> {{ appointment.time }}</p>
+      <form action="{{ url_for('views.delete_appointment', appointment_id=appointment.id) }}" method="post" class="delete-form">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  {% endfor %}
+
+  {% if not appointments %}
+    <p>No appointments found.</p>
+  {% endif %}
+{% endblock %}
