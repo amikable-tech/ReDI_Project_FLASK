@@ -14,12 +14,12 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         admin = Admin(username=form.username.data, email=form.email.data, password=form.password.data)
-        # Save the user to the database
         db.session.add(admin)
         db.session.commit()
+        login_user(admin, remember=True)
         flash('Account created successfully! Please log in.', 'success')
         return redirect(url_for('auth.login'))
-    return render_template('signup.html', form=form)
+    return render_template('signup.html', admin=current_user )
 
 
 @auth.route('/login', methods=['GET', 'POST'])

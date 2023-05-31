@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DateField, TimeField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
-from datetime import datetime
+from flask import request
 
 
 class SignupForm(FlaskForm):
@@ -11,11 +13,21 @@ class SignupForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
 
+    def validate_on_submit(self):
+        if request.method == 'POST':
+            return super().validate_on_submit()
+        return False
+
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     submit = SubmitField('Log In')
+
+    def validate_on_submit(self):
+        if request.method == 'POST':
+            return super().validate_on_submit()
+        return False
 
 
 class AppointmentForm(FlaskForm):
@@ -26,6 +38,12 @@ class AppointmentForm(FlaskForm):
     time = TimeField('Time', validators=[DataRequired()])
     message = TextAreaField('Message', validators=[Length(max=200)])
     submit = SubmitField('Book Appointment')
+
+    def validate_on_submit(self):
+        if request.method == 'POST':
+            return super().validate_on_submit()
+        return False
+
 
     @staticmethod
     def validate_date(field):
